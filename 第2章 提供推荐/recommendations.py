@@ -24,18 +24,25 @@ from math import sqrt
 # Returns a distance-based similarity score for person1 and person2
 def sim_distance(prefs,person1,person2):
   # Get the list of shared_items
-  si={}
-  for item in prefs[person1]: 
-    if item in prefs[person2]: si[item]=1
+	print ("prefs:%s"%(prefs))
+	print ("person1:%s"%(person1))
+	print ("person2:%s"%(person2))
+	si={}
+	for item in prefs[person1]: 
+		if item in prefs[person2]: 
+			si[item]=1
+	print ("the similar item:%s"%si)
+  
+
 
   # if they have no ratings in common, return 0
-  if len(si)==0: return 0
+	if len(si)==0:
+		 return 0
 
-  # Add up the squares of all the differences
-  sum_of_squares=sum([pow(prefs[person1][item]-prefs[person2][item],2) 
-                      for item in prefs[person1] if item in prefs[person2]])
+	# Add up the squares of all the differences
+	sum_of_squares=sum([pow(prefs[person1][item]-prefs[person2][item],2) for item in prefs[person1] if item in prefs[person2]])
 
-  return 1/(1+sum_of_squares)
+	return 1/(1+sum_of_squares)
 
 # Returns the Pearson correlation coefficient for p1 and p2
 def sim_pearson(prefs,p1,p2):
@@ -131,7 +138,7 @@ def calculateSimilarItems(prefs,n=10):
   for item in itemPrefs:
     # Status updates for large datasets
     c+=1
-    if c%100==0: print "%d / %d" % (c,len(itemPrefs))
+    if c%100==0: print ("%d / %d" % (c,len(itemPrefs)))
     # Find the most similar items to this one
     scores=topMatches(itemPrefs,item,n=n,similarity=sim_distance)
     result[item]=scores
@@ -178,3 +185,10 @@ def loadMovieLens(path='/data/movielens'):
     prefs.setdefault(user,{})
     prefs[user][movies[movieid]]=float(rating)
   return prefs
+
+def main():
+	result = sim_distance(critics,'Lisa Rose','Gene Seymour')
+	print ("result:%.10f"%(result))
+
+if __name__ == "__main__":
+	main()
